@@ -1,0 +1,2369 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "METRIC ANOMALY DETECTION SDN",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": 3,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 91,
+      "options": {
+        "code": {
+          "language": "html",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "\n  <h1 style=\"color: #ffffff; background-color: #3b5998; font-family: 'Arial', sans-serif; padding: 20px; text-align: center; border-radius: 10px; box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.1);\">\n    Anomaly Detection Dashboard\n  </h1>\n\n",
+        "mode": "html"
+      },
+      "pluginVersion": "11.3.0-pre",
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 39,
+      "panels": [],
+      "title": "Univariate Anomaly Detection (Mzone727)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 4
+      },
+      "id": 90,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "/.*/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  sum(anomaly_label) AS \"Anomaly Count\"\n  -- COUNT(anomaly_label) AS \"Total Records\"\nFROM\n  anomaly_detection.anomaly_detection_score_sdn_2\nWHERE\n  anomaly_label IN (1,0)\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  );\n\n\n--   AND time >= extract(epoch from to_timestamp($__timeFrom(), 'YYYY-MM-DD\"T\"HH24:MI:SS.Z'))\n--   AND time <= extract(epoch from to_timestamp($__timeTo(), 'YYYY-MM-DD\"T\"HH24:MI:SS.Z'))\n-- GROUP BY time\n-- ORDER BY time\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Anomalies Detected",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 1,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 37,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 3,
+        "y": 4
+      },
+      "id": 89,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\nto_timestamp(time) as time,\n-- kube_node_name,\n-- kube_cluster_name,\n-- agent_tag_cluster,\n-- agent_tag_cluster_type,\n-- host_hostname,\n-- kube_namespace_name,\n-- kube_workload_name,\n-- kube_pod_name,\n${sysdig_metrics:raw}\nFROM\n  anomaly_detection.anomaly_detection_score_sdn_2\nWHERE \n  anomaly_label in (0,1)\n  -- anomaly_label = 1\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  )\n  ORDER BY\n  time ASC;\n-- SELECT \n--   to_timestamp(timestamp) AS time, \n--    ${sysdig_metrics:raw}\n-- FROM \n--   anomaly_detection.anomaly_detection_score_sdn_2\n-- WHERE \n--   anomaly_label = 1;\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Sysdig Metrics Anomalies Details",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 100,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 13,
+        "y": 4
+      },
+      "id": 92,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.69,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "sysdig_metric",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  median_value AS \"Median Values\",\n  sysdig_metric AS \"Sysdig Metric\"\nFROM\n  anomaly_detection.anomaly_detection_univarient_sysdig_metrics_median_values\nWHERE\n  sysdig_metric IN ($sysdig_metrics);\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Metric Median Values",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 8
+      },
+      "id": 93,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COUNT(anomaly_label) AS \"Total Records\"\nFROM\n  anomaly_detection.anomaly_detection_score_sdn_2\nWHERE\n  anomaly_label IN (1,0)\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  );\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Total Records",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Agent Tag Cluster Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 107
+              },
+              {
+                "id": "custom.width",
+                "value": 200
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_host_memory_used_bytes"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 168
+              },
+              {
+                "id": "custom.width",
+                "value": 268
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_cpu_quota_used_percent"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 184
+              },
+              {
+                "id": "custom.width",
+                "value": 341
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_memory_used_percent"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 309
+              },
+              {
+                "id": "custom.width",
+                "value": 312
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube_pod_name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 251
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host_hostname"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 228
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_net_http_request_count"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 313
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_cpu_used_percent"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 280
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_memory_used_percent"
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_host_memory_total_bytes"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 248
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_file_open_count"
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_host_fs_used_percent"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_cpu_quota_used_percent"
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_host_memory_used_bytes"
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 221
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fabcon_flow_log_ebpf_flow_count"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 276
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fabcon_flow_log_publish_failed_data_sent_per_flush"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 378
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fabcon_flow_log_iobricks_rej_packet_count"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 325
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fabcon_iob_fw_stats_summaryportmetricsinserttohashfailurecounte"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 506
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fabcon_logger_entries"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 198
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "grpc_client_handled_total"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 210
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube_node_name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 191
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_net_total_bytes"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 278
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_net_tcp_queue_len"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 312
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "sysdig_container_memory_limit_used_percent"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 361
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 62,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "timestamp"
+          }
+        ]
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\nto_timestamp(\"time\") AT TIME ZONE 'UTC' AS \"Time\",\n \"kube_node_name\" AS \"Kube Node Name\",\n\"kube_cluster_name\" as \"Kube Cluster Name\",\n\"agent_tag_cluster\" as \"Agent Tag Cluster\",\n\"agent_tag_cluster_type\" as \"Agent Tag Cluster Type\",\n\"host_hostname\" as \"Host Name\",\nkube_namespace_name as \"Kube Name Space\",\n\"kube_workload_name\" as \"Kube Workload Name\",\n\"kube_pod_name\" as \"Kube Pod Name\",\n${sysdig_metrics:raw}\nFROM\n  anomaly_detection.anomaly_detection_score_sdn_2\nWHERE \n  anomaly_label = 1\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  );\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Anomalies Details",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 41,
+      "panels": [],
+      "title": "Multivariate Anomaly Detection (Mzone727)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 21
+      },
+      "id": 94,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(anomaly_label) AS \"Anomaly Count\"\nFROM\n  anomaly_detection.anomaly_detection_score_multivariate_sdn_2\nWHERE\n  anomaly_label IN (1,0)\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  );\n\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Anomalies Detected",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 3,
+        "y": 21
+      },
+      "id": 95,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COUNT(anomaly_label) as \"Total Records\" \nFROM\n  anomaly_detection.anomaly_detection_score_multivariate_sdn_2\nWHERE\n  anomaly_label IN (1,0)\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  );\n\n\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Total Records",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kube_pod_name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 291
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 6,
+        "y": 21
+      },
+      "id": 66,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "anomaly_count"
+          }
+        ]
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  host_hostname as \"Host Name\",\n  kube_namespace_name as \"Kube Name Space\",\n  kube_workload_name as \"Kube Work Load Name\",\n  kube_pod_name as \"Kube Pod Name\",\n  count(anomaly_label) as \"Anomaly Count\"\nFROM\n  anomaly_detection.anomaly_detection_score_multivariate_sdn_2\nWHERE\n  anomaly_label = 1\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  )\n  GROUP BY  host_hostname,\n  kube_namespace_name,\n  kube_workload_name,\n  kube_pod_name\nORDER BY \"Anomaly Count\" DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Top Impacted Hosts",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 9,
+        "x": 15,
+        "y": 21
+      },
+      "id": 96,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  host_hostname as \"Host Name\",\n  -- kube_namespace_name,\n  -- kube_workload_name,\n  -- kube_pod_name,\n  count(anomaly_label) as \"Anomaly Count\"\nFROM\n  anomaly_detection.anomaly_detection_score_multivariate_sdn_2\nWHERE\n  anomaly_label = 1\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  )\n  GROUP BY  host_hostname\n  -- kube_namespace_name,\n  -- kube_workload_name,\n  -- kube_pod_name\nORDER BY \"Anomaly Count\" DESC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 24
+      },
+      "id": 64,
+      "options": {
+        "afterRender": "",
+        "content": "<div>\n  <!-- <h2>Top Metrics</h2> -->\n  <ul>\n  {{{data.[0].index}}}\n  </ul>\n</div>",
+        "contentPartials": [],
+        "defaultContent": "The query didn't return any results.",
+        "editor": {
+          "format": "auto",
+          "height": 139,
+          "language": "markdown"
+        },
+        "editors": [],
+        "externalScripts": [],
+        "externalStyles": [],
+        "helpers": "",
+        "renderMode": "allRows",
+        "styles": "",
+        "wrap": true
+      },
+      "pluginVersion": "5.4.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "-- SELECT index FROM anomaly_detection.anomaly_detection_multivariate_loadings_sdn_1\n-- order by level_0 desc LIMIT 1;\n\n\nSELECT index FROM anomaly_detection.anomaly_detection_multivariate_loadings_sdn_1\norder by index desc LIMIT 1;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Top Metrics Causing Anonaly",
+      "type": "marcusolsson-dynamictext-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 27
+      },
+      "id": 97,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  host_hostname,\n  kube_namespace_name,\n  kube_workload_name,\n  kube_pod_name,\n  ${sysdig_metrics_multivariant:raw}\nFROM\n  anomaly_detection.anomaly_detection_score_multivariate_sdn_2\nWHERE\n  anomaly_label = 1\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  )\nORDER BY\n  time ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Metric Based Anomalies Detected",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 13,
+        "x": 11,
+        "y": 27
+      },
+      "id": 36,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "kube_pod_name"
+          }
+        ]
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time as \"Time\",\n  host_hostname as \"Host Name\",\n  kube_namespace_name as \"Kube Name Space\",\n  kube_workload_name as \"Kube Work Load Name\",\n  kube_pod_name as \"Kube Pod Name\",\n  ${sysdig_metrics_multivariant:raw}\nFROM\n  anomaly_detection.anomaly_detection_score_multivariate_sdn_2\nWHERE\n  anomaly_label = 1\n  AND (\n    COALESCE('${kube_pod_name:raw}', '') = '' OR kube_pod_name = '${kube_pod_name:raw}'\n  )\n  AND (\n    (\n      host_hostname IN ($host_hostname_1) OR\n      host_hostname IN ($host_hostname_2) OR\n      host_hostname IS NULL\n    )\n    AND (\n      kube_namespace_name IN ($kube_namespace) OR\n      kube_namespace_name IS NULL\n    )\n  )\n    -- AND time >= extract(epoch from to_timestamp($__timeFrom(), 'YYYY-MM-DD\"T\"HH24:MI:SS.Z'))\n  -- AND time <= extract(epoch from to_timestamp($__timeTo(), 'YYYY-MM-DD\"T\"HH24:MI:SS.Z'))\nORDER BY\n  time ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Anomalies Details",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 69,
+      "panels": [],
+      "title": "Sysdig Events & Notifications (DAL us-south production Sysdig)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
+      "id": 67,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 16
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(id) AS \"Total Events in last 1 hour\",\n  \"timestamp\" as time\nFROM\n  anomaly_detection.sysdig_events \nGROUP BY timestamp\n",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "anomaly_label",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "anomaly_detection_score"
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "string"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 12,
+        "y": 36
+      },
+      "id": 99,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 16
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "ce3wtvcofdypse"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE \n    WHEN COUNT(id) > 1 THEN COUNT(id)\n    ELSE 0\n  END AS \"Total Active Notifications in last 24 hour\",\n  \"timestamp\" as time\nFROM\n  anomaly_detection.sysdig_notifications\n  GROUP BY timestamp\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 38
+      },
+      "id": 98,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [
+            "sum",
+            "last"
+          ],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xTickLabelMaxLength": 30,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(name) as \"Counts\", name as \"Name\"\nFROM anomaly_detection.sysdig_events\nGROUP BY \"Name\"\norder by \"Counts\" desc",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": false,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 30
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 38
+      },
+      "id": 85,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.85,
+        "colorByField": "notification_counts",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "alertName",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \"alertName\" as \"Alert Name\", count(\"alertName\") as \"Notification Count\"\nFROM anomaly_detection.sysdig_notifications \nGROUP BY \"alertName\"\norder by \"Notification Count\" desc\nlimit 10;",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Top 10 Sysdig Notifications",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scope"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 767
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 46
+      },
+      "id": 72,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT scope as \"Scope\", COUNT(scope) as \"Event Counts\"\nFROM anomaly_detection.sysdig_events\nGROUP BY \"Scope\"\norder by \"Event Counts\" desc",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "COUNT",
+                "parameters": [
+                  {
+                    "name": "name",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "sysdig_events"
+        }
+      ],
+      "title": "Top Impacted Hosts(Last 1 hour)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "ee4ejrt8f6upsb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kube Cluster Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kube Pod Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "alertName"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 546
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 176
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "severity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 176
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 16,
+        "x": 8,
+        "y": 46
+      },
+      "id": 74,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.3.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "bdrcag0236p6oe"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(\"timestamp\"/1000000) as \"Time\", kube_cluster_name as \"Kube Cluster Name\", kube_pod_name as \"Kube Pod Name\", \"alertName\", severity\nFROM anomaly_detection.sysdig_notifications \norder by severity asc",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "name": "COUNT",
+                "parameters": [
+                  {
+                    "name": "name",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "sysdig_events"
+        }
+      ],
+      "title": "Notifications Details",
+      "transformations": [
+        {
+          "id": "formatTime",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": true,
+  "refresh": "15m",
+  "schemaVersion": 40,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "grafana-postgresql-datasource",
+          "value": "ee4ejrt8f6upsb"
+        },
+        "includeAll": false,
+        "name": "Postgres",
+        "options": [],
+        "query": "grafana-postgresql-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "ee4ejrt8f6upsb"
+        },
+        "definition": "select distinct(host_hostname) from anomaly_detection.anomaly_detection_score_sdn_2  order by host_hostname limit 800;",
+        "includeAll": true,
+        "label": "Host Name",
+        "multi": true,
+        "name": "host_hostname_1",
+        "options": [],
+        "query": "select distinct(host_hostname) from anomaly_detection.anomaly_detection_score_sdn_2  order by host_hostname limit 800;",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "ee4ejrt8f6upsb"
+        },
+        "definition": "SELECT column_name FROM information_schema.columns \nWHERE table_name = 'anomaly_detection_score_sdn_2' \nAND (column_name LIKE 'fabcon%' OR column_name IN ( 'sysdig_host_net_tcp_queue_len',\n       'sysdig_container_net_total_bytes',\n       'sysdig_container_net_tcp_queue_len',\n       'sysdig_container_memory_limit_used_percent',\n       'fabcon_iob_st_stats_DroppedPktsTotal', 'fabcon_nat_DroppedPktsTotal',\n       'sysdig_program_cpu_cores_used_percent',\n'fabcon_iob_fw_stats_SummaryPortMetricsInsertToHashFailureCounter'))",
+        "includeAll": true,
+        "label": "Univariate Sysdig Metrics",
+        "multi": true,
+        "name": "sysdig_metrics",
+        "options": [],
+        "query": "SELECT column_name FROM information_schema.columns \nWHERE table_name = 'anomaly_detection_score_sdn_2' \nAND (column_name LIKE 'fabcon%' OR column_name IN ( 'sysdig_host_net_tcp_queue_len',\n       'sysdig_container_net_total_bytes',\n       'sysdig_container_net_tcp_queue_len',\n       'sysdig_container_memory_limit_used_percent',\n       'fabcon_iob_st_stats_DroppedPktsTotal', 'fabcon_nat_DroppedPktsTotal',\n       'sysdig_program_cpu_cores_used_percent',\n'fabcon_iob_fw_stats_SummaryPortMetricsInsertToHashFailureCounter'))",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "10",
+          "value": "10"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "ee4ejrt8f6upsb"
+        },
+        "definition": "select * from anomaly_detection.anomaly_detection_multivariate_loadings_sdn_1 order by level_0 desc limit 1;",
+        "hide": 2,
+        "includeAll": false,
+        "label": "Top Variables",
+        "name": "top_variables",
+        "options": [],
+        "query": "select * from anomaly_detection.anomaly_detection_multivariate_loadings_sdn_1 order by level_0 desc limit 1;",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "ee4ejrt8f6upsb"
+        },
+        "definition": "SELECT DISTINCT kube_namespace_name\nFROM anomaly_detection.anomaly_detection_score_sdn_2\nWHERE TRIM(kube_namespace_name) <> '';",
+        "includeAll": true,
+        "label": "Kube Namespace",
+        "multi": true,
+        "name": "kube_namespace",
+        "options": [],
+        "query": "SELECT DISTINCT kube_namespace_name\nFROM anomaly_detection.anomaly_detection_score_sdn_2\nWHERE TRIM(kube_namespace_name) <> '';",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "ee4ejrt8f6upsb"
+        },
+        "definition": "SELECT host_hostname\nFROM (\n    SELECT DISTINCT(host_hostname)\n    FROM anomaly_detection.anomaly_detection_score_sdn_2\n    ORDER BY host_hostname\n    LIMIT 800\n    OFFSET 800\n) AS subquery\nUNION\nSELECT 'qz'\nWHERE NOT EXISTS (\n    SELECT DISTINCT(host_hostname)\n    FROM anomaly_detection.anomaly_detection_score_sdn_2\n    ORDER BY host_hostname\n    LIMIT 800\n    OFFSET 800\n);\n",
+        "includeAll": true,
+        "label": "Host Hostname 2",
+        "multi": true,
+        "name": "host_hostname_2",
+        "options": [],
+        "query": "SELECT host_hostname\nFROM (\n    SELECT DISTINCT(host_hostname)\n    FROM anomaly_detection.anomaly_detection_score_sdn_2\n    ORDER BY host_hostname\n    LIMIT 800\n    OFFSET 800\n) AS subquery\nUNION\nSELECT 'qz'\nWHERE NOT EXISTS (\n    SELECT DISTINCT(host_hostname)\n    FROM anomaly_detection.anomaly_detection_score_sdn_2\n    ORDER BY host_hostname\n    LIMIT 800\n    OFFSET 800\n);\n",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "SELECT column_name FROM information_schema.columns \nWHERE table_name = 'anomaly_detection_score_multivariate_sdn_2' \nAND (column_name LIKE 'fabcon%' OR column_name IN ( 'sysdig_host_net_tcp_queue_len',\n       'sysdig_container_net_total_bytes',\n       'sysdig_container_net_tcp_queue_len',\n       'sysdig_container_memory_limit_used_percent',\n       'fabcon_iob_st_stats_DroppedPktsTotal', 'fabcon_nat_DroppedPktsTotal',\n       'sysdig_program_cpu_cores_used_percent',\n'fabcon_iob_fw_stats_SummaryPortMetricsInsertToHashFailureCounter'))",
+        "includeAll": true,
+        "label": "Multivariant Sysdig Metrics",
+        "multi": true,
+        "name": "sysdig_metrics_multivariant",
+        "options": [],
+        "query": "SELECT column_name FROM information_schema.columns \nWHERE table_name = 'anomaly_detection_score_multivariate_sdn_2' \nAND (column_name LIKE 'fabcon%' OR column_name IN ( 'sysdig_host_net_tcp_queue_len',\n       'sysdig_container_net_total_bytes',\n       'sysdig_container_net_tcp_queue_len',\n       'sysdig_container_memory_limit_used_percent',\n       'fabcon_iob_st_stats_DroppedPktsTotal', 'fabcon_nat_DroppedPktsTotal',\n       'sysdig_program_cpu_cores_used_percent',\n'fabcon_iob_fw_stats_SummaryPortMetricsInsertToHashFailureCounter'))",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "label": "Kube Pod Name",
+        "name": "kube_pod_name",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "2024-11-13T11:01:00.000Z",
+    "to": "2024-11-13T11:15:00.000Z"
+  },
+  "timepicker": {
+    "hidden": true,
+    "nowDelay": "",
+    "refresh_intervals": [
+      "15m"
+    ]
+  },
+  "timezone": "browser",
+  "title": "Anomaly_Detection_SDN V2.3",
+  "uid": "ce4pw3symfjswb",
+  "version": 6,
+  "weekStart": ""
+}

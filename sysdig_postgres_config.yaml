@@ -1,0 +1,32 @@
+# Database configuration
+database:
+  user: "your_db_user"
+  password: "your_db_password"
+  host_url: "your_db_host"
+  port: "5432"
+  db_name: "sysdig_anomaly_detection"
+
+# Sysdig API configuration
+sysdig:
+  api_token: "your_sysdig_api_token"
+  sdc_url: "your_sysdig_instance_url"
+
+# Schema and table configurations
+schema:
+  name: "anomaly_detection"
+  tables:
+    univariate: "anomaly_detection_score_univariate"
+    multivariate: "anomaly_detection_score_multivariate"
+    multivariate_loadings: "anomaly_detection_multivariate_loadings"
+    sysdig_events: "sysdig_events"
+    sysdig_notifications: "sysdig_notifications"
+    univariate_median_value: "anomaly_detection_univarient_metrics_median_values"
+
+# Model configurations
+model:
+  threshold: 100
+
+# Paths
+paths:
+  base_dir: "/"
+  log_file: "anomaly_detection.log"

@@ -1,0 +1,22 @@
+# IBM Cloud Object Storage Configuration
+cos:
+  endpoint: "your-cos-endpoint"
+  api_key_id: "your-api-key"
+  service_id: "your-service-id"
+  bucket_name: "your-bucket-name"
+  iam_auth_endpoint: "your-iam-auth-endpoint"
+
+# Database Configuration
+database:
+  path: "processed-data/anomaly_detection.db"
+
+# Anomaly Detection Configuration
+anomaly:
+  threshold: 50
+  tables:
+    univariate: "anomaly_detection_score_sdn_2"
+    multivariate: "anomaly_detection_score_multivariate_sdn_2"
+    multivariate_loadings: "anomaly_detection_multivariate_loadings_sdn_1"
+    sysdig_events: "sysdig_events"
+    sysdig_notifications: "sysdig_notifications"
+    univariate_median: "anomaly_detection_univarient_sysdig_metrics_median_values"
